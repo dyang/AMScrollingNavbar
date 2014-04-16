@@ -35,6 +35,9 @@
 - (void)setDelayDistance:(float)delayDistance { objc_setAssociatedObject(self, @selector(delayDistance), [NSNumber numberWithFloat:delayDistance], OBJC_ASSOCIATION_RETAIN); }
 - (float)delayDistance { return [objc_getAssociatedObject(self, @selector(delayDistance)) floatValue]; }
 
+- (void)setButtonOriginalWidth:(float)buttonOriginalWidth { objc_setAssociatedObject(self, @selector(buttonOriginalWidth), [NSNumber numberWithFloat:buttonOriginalWidth], OBJC_ASSOCIATION_RETAIN); }
+- (float)buttonOriginalWidth { return [objc_getAssociatedObject(self, @selector(buttonOriginalWidth)) floatValue]; }
+
 - (void)followScrollView:(UIView*)scrollableView
 {
 	[self followScrollView:scrollableView withDelay:0];
@@ -322,19 +325,29 @@
 
     // Scaling to 0,0 will results in a math error, so we apply a limit here to the lowest possible scale
     float scale = MAX(alpha, 0.01);
-    CGAffineTransform scaleTransform = CGAffineTransformConcat(CGAffineTransformIdentity, CGAffineTransformMakeScale(scale, scale));
 
-	[self.overlay setAlpha:1 - alpha];
-	[self.navigationItem.leftBarButtonItems enumerateObjectsUsingBlock:^(UIBarButtonItem* obj, NSUInteger idx, BOOL *stop) {
+    // Keep track of the original width in order to calculate the new size
+    if (self.buttonOriginalWidth == 0) {
+        self.buttonOriginalWidth = self.navigationItem.leftBarButtonItem.customView.frame.size.width;
+    }
+    float newWidth = self.buttonOriginalWidth * scale;
+
+    [self.overlay setAlpha:1 - alpha];
+
+    [self.navigationItem.leftBarButtonItems enumerateObjectsUsingBlock:^(UIBarButtonItem* obj, NSUInteger idx, BOOL *stop) {
 		obj.customView.alpha = alpha;
-        obj.customView.transform = scaleTransform;
+        CGRect buttonFrame = obj.customView.frame;
+        buttonFrame.size = CGSizeMake(newWidth, newWidth);
+        obj.customView.frame = buttonFrame;
 	}];
 	[self.navigationItem.rightBarButtonItems enumerateObjectsUsingBlock:^(UIBarButtonItem* obj, NSUInteger idx, BOOL *stop) {
 		obj.customView.alpha = alpha;
-        obj.customView.transform = scaleTransform;
+        CGRect buttonFrame = obj.customView.frame;
+        buttonFrame.size = CGSizeMake(newWidth, newWidth);
+        obj.customView.frame = buttonFrame;
 	}];
 	self.navigationItem.titleView.alpha = alpha;
-    self.navigationItem.titleView.transform = scaleTransform;
+    self.navigationItem.titleView.transform = CGAffineTransformConcat(CGAffineTransformIdentity, CGAffineTransformMakeScale(scale, scale));
 	self.navigationController.navigationBar.tintColor = [self.navigationController.navigationBar.tintColor colorWithAlphaComponent:alpha];
 }
 
