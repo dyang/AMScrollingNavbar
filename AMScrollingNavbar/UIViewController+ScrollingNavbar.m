@@ -319,14 +319,22 @@
 	
 	// Change the alpha channel of every item on the navbr. The overlay will appear, while the other objects will disappear, and vice versa
 	float alpha = (frame.origin.y + self.deltaLimit) / frame.size.height;
+
+    // Scaling to 0,0 will results in a math error, so we apply a limit here to the lowest possible scale
+    float scale = MAX(alpha, 0.01);
+    CGAffineTransform scaleTransform = CGAffineTransformConcat(CGAffineTransformIdentity, CGAffineTransformMakeScale(scale, scale));
+
 	[self.overlay setAlpha:1 - alpha];
 	[self.navigationItem.leftBarButtonItems enumerateObjectsUsingBlock:^(UIBarButtonItem* obj, NSUInteger idx, BOOL *stop) {
 		obj.customView.alpha = alpha;
+        obj.customView.transform = scaleTransform;
 	}];
 	[self.navigationItem.rightBarButtonItems enumerateObjectsUsingBlock:^(UIBarButtonItem* obj, NSUInteger idx, BOOL *stop) {
 		obj.customView.alpha = alpha;
+        obj.customView.transform = scaleTransform;
 	}];
 	self.navigationItem.titleView.alpha = alpha;
+    self.navigationItem.titleView.transform = scaleTransform;
 	self.navigationController.navigationBar.tintColor = [self.navigationController.navigationBar.tintColor colorWithAlphaComponent:alpha];
 }
 
