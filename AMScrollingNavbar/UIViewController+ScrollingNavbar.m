@@ -38,6 +38,12 @@
 - (void)setButtonOriginalWidth:(float)buttonOriginalWidth { objc_setAssociatedObject(self, @selector(buttonOriginalWidth), [NSNumber numberWithFloat:buttonOriginalWidth], OBJC_ASSOCIATION_RETAIN); }
 - (float)buttonOriginalWidth { return [objc_getAssociatedObject(self, @selector(buttonOriginalWidth)) floatValue]; }
 
+- (void)setLogoOriginalWidth:(float)logoOriginalWidth { objc_setAssociatedObject(self, @selector(logoOriginalWidth), [NSNumber numberWithFloat:logoOriginalWidth], OBJC_ASSOCIATION_RETAIN); }
+- (float)logoOriginalWidth { return [objc_getAssociatedObject(self, @selector(logoOriginalWidth)) floatValue]; }
+
+- (void)setLogoOriginalHeight:(float)logoOriginalHeight { objc_setAssociatedObject(self, @selector(logoOriginalHeight), [NSNumber numberWithFloat:logoOriginalHeight], OBJC_ASSOCIATION_RETAIN); }
+- (float)logoOriginalHeight { return [objc_getAssociatedObject(self, @selector(logoOriginalHeight)) floatValue]; }
+
 - (void)followScrollView:(UIView*)scrollableView
 {
 	[self followScrollView:scrollableView withDelay:0];
@@ -330,6 +336,11 @@
     if (self.buttonOriginalWidth == 0) {
         self.buttonOriginalWidth = self.navigationItem.leftBarButtonItem.customView.frame.size.width;
     }
+    if (self.logoOriginalWidth == 0 && self.logoOriginalHeight == 0) {
+        self.logoOriginalWidth = self.navigationItem.titleView.frame.size.width;
+        self.logoOriginalHeight = self.navigationItem.titleView.frame.size.height;
+    }
+
     float newWidth = self.buttonOriginalWidth * scale;
 
     [self.overlay setAlpha:1 - alpha];
@@ -347,7 +358,9 @@
         obj.customView.frame = buttonFrame;
 	}];
 	self.navigationItem.titleView.alpha = alpha;
-    self.navigationItem.titleView.transform = CGAffineTransformConcat(CGAffineTransformIdentity, CGAffineTransformMakeScale(scale, scale));
+    CGRect logoFrame = self.navigationItem.titleView.frame;
+    logoFrame.size = CGSizeMake(self.logoOriginalWidth * scale, self.logoOriginalHeight * scale);
+    self.navigationItem.titleView.frame = logoFrame;
 	self.navigationController.navigationBar.tintColor = [self.navigationController.navigationBar.tintColor colorWithAlphaComponent:alpha];
 }
 
