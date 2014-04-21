@@ -7,12 +7,12 @@
 //
 
 #import "AMTableViewController.h"
+#import "UIViewController+ScrollingNavbar.h"
 
 @interface AMTableViewController () <UITableViewDataSource, UITableViewDelegate, UISearchBarDelegate>
 
 @property (weak, nonatomic) IBOutlet UITableView *tableView;
 @property (strong, nonatomic) NSArray* data;
-@property (strong, nonatomic) UIView *topView;
 
 @end
 
@@ -29,11 +29,17 @@
 	[self.tableView setDelegate:self];
 	[self.tableView setDataSource:self];
 	self.edgesForExtendedLayout = UIRectEdgeNone;
-
+    
 	// Just call this line to enable the scrolling navbar
 	[self followScrollView:self.tableView];
 	
-	[self refreshNavbar];
+	[self.tableView setContentInset:UIEdgeInsetsMake(0, 0, 44, 0)];
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+	[super viewDidDisappear:animated];
+	[self showNavBarAnimated:NO];
 }
 
 - (void)searchBarTextDidEndEditing:(UISearchBar *)searchBar
@@ -45,7 +51,7 @@
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView
 {
 	// This enables the user to scroll down the navbar by tapping the status bar.
-	[self showNavbar];
+	[self performSelector:@selector(showNavbar) withObject:nil afterDelay:0.1];
 	
 	return YES;
 }
@@ -70,28 +76,6 @@
 	cell.textLabel.text = self.data[indexPath.row];
 	
 	return cell;
-}
-
-- (void)tableView:(UITableView *)tableView didSelectRowAtIndexPath:(NSIndexPath *)indexPath
-{
-    self.topView = [[UIView alloc] initWithFrame:self.view.frame];
-	
-    UIButton *dismiss = [[UIButton alloc]initWithFrame:CGRectMake(0.0, 0.0, 50.0, 50.0)];
-    [dismiss setTitle:@"dismiss" forState:UIControlStateNormal];
-    [dismiss addTarget:self
-                action:@selector(doSomething)
-      forControlEvents:UIControlEventTouchUpInside];
-	[dismiss setTintColor:[UIColor blackColor]];
-    [self.topView addSubview:dismiss];
-	[self showNavbar];
-    [self.navigationController.view addSubview:self.topView];
-	
-    [self.topView setAlpha:0.3];
-}
-
-- (void)doSomething
-{
-    [self.topView removeFromSuperview];
 }
 
 @end

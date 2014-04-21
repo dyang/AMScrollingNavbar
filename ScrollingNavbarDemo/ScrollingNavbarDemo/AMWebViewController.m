@@ -7,6 +7,7 @@
 //
 
 #import "AMWebViewController.h"
+#import "UIViewController+ScrollingNavbar.h"
 
 @interface AMWebViewController () <UIScrollViewDelegate>
 
@@ -36,6 +37,12 @@
 	
 	// We need to set self as delegate of the inner scrollview of the webview to override scrollViewShouldScrollToTop 
 	self.webView.scrollView.delegate = self;
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+	[super viewDidDisappear:animated];
+	[self showNavBarAnimated:NO];
 }
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView

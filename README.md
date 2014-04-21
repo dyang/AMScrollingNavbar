@@ -12,35 +12,25 @@ I also wrote about this control in [this article](http://andreamazz.github.io/bl
 
 Screenshot
 --------------------
-![AMScrollingNavbar](http://www.eflatgames.com/github/AMScrollingNavbar3.gif)
+![AMScrollingNavbar](https://raw.githubusercontent.com/andreamazz/AMScrollingNavbar/master/screenshot.gif)
 
-Setup with Cocoapods
+Getting Started
+=================
+
+Setup
 --------------------
-* Add ```pod 'AMScrollingNavbar'``` to your Podfile
+* Add ```pod 'AMScrollingNavbar'``` to your [Podfile](http://cocoapods.org/)
 * Run ```pod install```
 * Run ```open App.xcworkspace```
-
-Setup as a subclass
---------------------
-* Import ```AMScrollingNavbar.h``` in your controller's header file
-* Subclass ```AMScrollingNavbar``` in your controller
-
-Setup as a category
---------------------
 * Import ```UIViewController+ScrollingNavbar.h``` in your controller
 * Implement the two following methods:
 ```objc
 - (void)viewWillDisappear:(BOOL)animated
 {
 	[super viewWillDisappear:animated];
-	[self showNavbar];
+	[self showNavBarAnimated:NO];
 }
 
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-	[self refreshNavbar];
-}
 ```
 
 Enable the scrolling
@@ -64,14 +54,22 @@ Set the view constraints
 --------------------
 Make sure to set your scrollview's constraint properly. Please note that the library changes the scrollview's superview frame.
 
-![AMScrollingNavbar](http://www.eflatgames.com/github/AMScrollingNavbarLayout.png)
+![AMScrollingNavbar](https://raw.githubusercontent.com/andreamazz/AMScrollingNavbar/master/constraints.png)
 
-Update the navbar fadeout
---------------------
-Call ```[self refreshNavbar]``` whenever you change your navbar items, or they won't fadeout.
 
 Changelog 
 ==================
+
+1.0
+--------------------
+- Dropped support to the subclass implementation
+- Improved iOS6 compatibility
+- Added `stopFollowingScrollView`
+- Removed `refreshNavbar`
+
+0.7
+--------------------
+- Added UIViewController's category. The support for the subclassed version will be dropped in future releases.
 
 0.6
 --------------------

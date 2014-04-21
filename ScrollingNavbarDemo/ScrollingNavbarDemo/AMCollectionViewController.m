@@ -7,6 +7,7 @@
 //
 
 #import "AMCollectionViewController.h"
+#import "UIViewController+ScrollingNavbar.h"
 
 @interface AMCollectionViewController ()
 
@@ -26,6 +27,12 @@
 	// Just call this line to enable the scrolling navbar
 	[self followScrollView:self.collectionView];
 
+}
+
+- (void)viewDidDisappear:(BOOL)animated
+{
+	[super viewDidDisappear:animated];
+	[self showNavBarAnimated:NO];
 }
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView

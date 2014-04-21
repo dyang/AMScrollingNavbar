@@ -17,6 +17,7 @@
  *
  * Enables the scrolling on a generic UIView.
  * Also sets the value (in points) that needs to scroll through beofre the navbar is moved back into scene
+ * Remember to call showNavbar or showNavBarAnimated: in your viewDidDisappear.
  *
  * @param scrollableView The UIView where the scrolling is performed.
  * @param delay The delay of the downward scroll gesture
@@ -26,6 +27,7 @@
 /** Scrolling init method
  *
  * Enables the scrolling on a generic UIView.
+ * Remember to call showNavbar or showNavBarAnimated: in your viewDidDisappear.
  *
  * @param scrollableView The UIView where the scrolling is performed.
  */
@@ -45,11 +47,11 @@
  */
 - (void)showNavBarAnimated:(BOOL)animated;
 
-/** Navbar refresh
+/** Remove the scrollview tracking
  *
- * Use this method when you manually change the navbar items to re-enable the fadeout
+ * Use this method to stop following the navbar
  */
-- (void)refreshNavbar;
+- (void)stopFollowingScrollView;
 
 /** Enable or disable the scrolling
  *
@@ -58,3 +60,4 @@
 - (void)setScrollingEnabled:(BOOL)enabled;
 
 @end
+

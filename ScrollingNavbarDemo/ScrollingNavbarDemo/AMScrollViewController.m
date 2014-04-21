@@ -50,16 +50,10 @@
 	[[UIBarButtonItem alloc] initWithBarButtonSystemItem:UIBarButtonSystemItemAdd target:nil action:nil];
 }
 
-- (void)viewWillDisappear:(BOOL)animated
+- (void)viewDidDisappear:(BOOL)animated
 {
-	[super viewWillDisappear:animated];
-	[self showNavbar];
-}
-
-- (void)viewWillAppear:(BOOL)animated
-{
-	[super viewWillAppear:animated];
-	[self refreshNavbar];
+	[super viewDidDisappear:animated];
+	[self showNavBarAnimated:NO];
 }
 
 - (BOOL)scrollViewShouldScrollToTop:(UIScrollView *)scrollView
